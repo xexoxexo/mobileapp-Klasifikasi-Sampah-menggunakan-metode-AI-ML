@@ -58,8 +58,8 @@ class GeminiService {
   /// (e.g. before showing the progress dialog) so we don't penalise the
   /// first call just because lazy-init hasn't happened yet.
   bool get isConfigured {
-    final apiKey = dotenv.maybeGet('AQ.Ab8RN6Lo3pjcJNq-Dr0hVV5QpgqAmNIHWiUuShTstkCWDXvxKQ') ?? '';
-    return apiKey.isNotEmpty && apiKey != 'AQ.Ab8RN6Lo3pjcJNq-Dr0hVV5QpgqAmNIHWiUuShTstkCWDXvxKQ';
+    final apiKey = dotenv.maybeGet('GEMINI_API_KEY') ?? '';
+    return apiKey.isNotEmpty && apiKey != 'GEMINI_API_KEY';
   }
 
   /// Reason the service couldn't initialize (e.g. missing key), if any.
@@ -70,8 +70,8 @@ class GeminiService {
     if (_initialized) return;
     _initialized = true;
 
-    final apiKey = dotenv.maybeGet('AQ.Ab8RN6Lo3pjcJNq-Dr0hVV5QpgqAmNIHWiUuShTstkCWDXvxKQ') ?? '';
-    if (apiKey.isEmpty || apiKey == 'AQ.Ab8RN6Lo3pjcJNq-Dr0hVV5QpgqAmNIHWiUuShTstkCWDXvxKQ') {
+    final apiKey = dotenv.maybeGet('GEMINI_API_KEY') ?? '';
+    if (apiKey.isEmpty || apiKey == 'GEMINI_API_KEY') {
       _initError = 'GEMINI_API_KEY not set in .env';
       debugPrint('[Gemini] $_initError');
       return;
