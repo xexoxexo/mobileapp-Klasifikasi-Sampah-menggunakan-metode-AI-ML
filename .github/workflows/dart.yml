@@ -37,6 +37,7 @@ jobs:
 
       # Your project will need to have tests in test/ and a dependency on
       # package:test for this step to succeed. Note that Flutter projects will
-      # want to change this to 'flutter test'.
+      # want to change this to 'flutter tester'.
+      
       - name: izakis
         run: dart test
