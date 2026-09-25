@@ -3,17 +3,20 @@ name: CIGUY
 on:
   push:
     branches: [ "capstoneproject" ]
+    tags:
+      - 'v*.*.*'  # Menjalankan CD otomatis saat kamu push tag seperti v1.0.0, v1.1.0, dst.
   pull_request:
     branches: [ "capstoneproject" ]
 
 jobs:
   build:
-    # 'self-hosted'
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Ambil seluruh riwayat commit & tag
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -32,11 +35,14 @@ jobs:
       - name: Analyze project source
         run: flutter analyze || true
 
-      - name: Build Android APK
-        run: flutter build apk --release
+      # --- PENERAPAN SEMANTIC VERSIONING & DYNAMIC BUILD NUMBER ---
+      - name: Build Android APK with Dynamic Version
+        run: |
+          # Menggunakan github.run_number sebagai build-number otomatis
+          flutter build apk --release --build-number=${{ github.run_number }}
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: biny-app-release
+          name: biny-app-release-v${{ github.run_number }}
           path: build/app/outputs/flutter-apk/app-release.apk
