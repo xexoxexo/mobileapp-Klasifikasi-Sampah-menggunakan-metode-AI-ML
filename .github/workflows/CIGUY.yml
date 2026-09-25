@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "capstoneproject" ]
     tags:
-      - 'v*.*.*'  # Menjalankan CD otomatis saat kamu push tag seperti v1.0.0, v1.1.0, dst.
+      - 'v*.*.*'  # Menjalankan CD otomatis saat push tag seperti v1.0.0, v1.1.0, dst.
   pull_request:
     branches: [ "capstoneproject" ]
 
@@ -29,24 +29,30 @@ jobs:
         with:
           channel: 'stable'
 
+      # 1. BUAT FILE .ENV TERLEBIH DAHULU SEBELUM DIPANGGIL FLUTTER
+      - name: Create .env file
+        run: echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" > .env
+
+      # 2. INSTALL DEPENDENCIES (SEKARANG SUDAH BISA MEMBACA .ENV)
       - name: Install dependencies
         run: flutter pub get
 
       - name: Analyze project source
         run: flutter analyze || true
 
-      # --- PENERAPAN SEMANTIC VERSIONING & DYNAMIC BUILD NUMBER ---
+      # 3. JALANKAN TEST TERLEBIH DAHULU SEBELUM BUILD APK
+      - name: Run tests
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: flutter test
+
+      # 4. BUILD APK RELEASE
       - name: Build Android APK
         run: flutter build apk --release
 
+      # 5. UPLOAD ARTIFACT APK
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: biny-app-release-v${{ github.run_number }}
           path: build/app/outputs/flutter-apk/app-release.apk
-
-      - name: Run tests / build
-        run: flutter test
-
-      - name: Create .env file
-        run: echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" > .env
