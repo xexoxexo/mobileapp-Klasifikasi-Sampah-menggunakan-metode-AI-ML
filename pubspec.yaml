@@ -46,7 +46,6 @@ flutter:
     - assets/icons/
     - assets/models/waste_classifier.tflite
     - assets/models/rtdetr_best_fp32.tflite
-    - .env
 
   fonts:
     - family: Baloo2
