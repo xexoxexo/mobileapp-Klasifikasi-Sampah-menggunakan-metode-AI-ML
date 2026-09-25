@@ -37,7 +37,6 @@ jobs:
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
-        
         with:
           name: biny-app-release
           path: build/app/outputs/flutter-apk/app-release.apk
