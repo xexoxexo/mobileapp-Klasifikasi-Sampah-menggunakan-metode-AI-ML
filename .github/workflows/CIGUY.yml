@@ -36,10 +36,8 @@ jobs:
         run: flutter analyze || true
 
       # --- PENERAPAN SEMANTIC VERSIONING & DYNAMIC BUILD NUMBER ---
-      - name: Build Android APK with Dynamic Version
-        run: |
-          # Menggunakan github.run_number sebagai build-number otomatis
-          flutter build apk --release --build-number=${{ github.run_number }}
+      - name: Build Android APK
+        run: flutter build apk --release
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
@@ -47,7 +45,8 @@ jobs:
           name: biny-app-release-v${{ github.run_number }}
           path: build/app/outputs/flutter-apk/app-release.apk
 
-          - name: Run tests / build
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      - name: Run tests / build
         run: flutter test
+
+      - name: Create .env file
+        run: echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" > .env
