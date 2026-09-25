@@ -46,3 +46,8 @@ jobs:
         with:
           name: biny-app-release-v${{ github.run_number }}
           path: build/app/outputs/flutter-apk/app-release.apk
+
+          - name: Run tests / build
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: flutter test

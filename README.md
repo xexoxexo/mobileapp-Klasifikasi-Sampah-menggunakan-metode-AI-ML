@@ -13,8 +13,13 @@ AI-powered waste sorting interactive display application built with Flutter and 
 
 1. Install Flutter SDK (>= 3.12.1)
 2. Run `flutter pub get`
-3. Copy `.env` and set `GEMINI_API_KEY` (required for web; optional on Android if using on-device ML)
+3. Copy `.env.example` to `.env` and set `GEMINI_API_KEY` (required for web; optional on Android if using on-device ML)
 4. Run on your target platform:
+
+The `.env` file is bundled into the app so Flutter can load it. Do not use a
+valuable or unrestricted Gemini key in a released app: users can extract keys
+from client apps. For production, route Gemini requests through a backend and
+keep the key on the server.
 
 ### Android (full on-device ML)
 
