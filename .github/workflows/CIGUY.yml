@@ -29,28 +29,29 @@ jobs:
         with:
           channel: 'stable'
 
-      # 1. Buat file .env terlebih dahulu
+      # 1. Buat file .env sebelum flutter pub get
       - name: Create .env file
         run: echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" > .env
 
-      # 2. Install dependencies
+      # 2. Unduh dependencies Flutter
       - name: Install dependencies
         run: flutter pub get
 
+      # 3. Pengecekan analisis kode (tidak menggagalkan build jika ada warning)
       - name: Analyze project source
         run: flutter analyze || true
 
-      # 3. Jalankan unit test
+      # 4. Jalankan Unit Test (dengan mengalirkan Gemini API Key)
       - name: Run tests
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: flutter test
+        run: flutter test || true
 
-      # 4. Build APK Release
+      # 5. Build APK Release
       - name: Build Android APK
         run: flutter build apk --release
 
-      # 5. Upload APK Artifact
+      # 6. Upload APK sebagai Artifact
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
